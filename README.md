@@ -1,0 +1,4 @@
+rug
+===
+
+PHP CouchDB client
