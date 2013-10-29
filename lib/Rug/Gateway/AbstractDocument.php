@@ -15,7 +15,7 @@ abstract class AbstractDocument extends AbstractGateway {
     $this->_id = $id;
   }
 
-  public function getDBName() {
+  public function getDB() {
     return $this->_db;
   }
 

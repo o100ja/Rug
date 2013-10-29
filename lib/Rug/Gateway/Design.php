@@ -2,6 +2,7 @@
 namespace Rug\Gateway;
 
 use Rug\Connector\Connector;
+use Rug\Gateway\Design\View;
 use Rug\Message\Factory\DesignFactory;
 use Rug\Message\Parser\DesignParser;
 
@@ -16,9 +17,11 @@ class Design extends AbstractDocument {
 
   /********************************************************************************************************************/
 
-  public function view() {
-
+  public function view($name) {
+    return new View($this->_connector, $this->getDB(), $this->getID(), $name);
   }
+
+  /********************************************************************************************************************/
 
   public function save($data) {
     $parameters = array();

@@ -6,12 +6,12 @@ use Rug\Connector\Connector;
 
 class DesignFactory extends DocumentFactory {
 
-  private $_name;
-
   public function __construct(Connector $connector, $db, $id) {
-    parent::__construct($connector, $db, '_design/' . $id);
-    $this->_name = $id;
+    parent::__construct($connector, $db, $id);
   }
 
+  protected function _path() {
+    return '_design/' . parent::_path();
+  }
 
 }
