@@ -19,9 +19,9 @@ class DatabaseFactory extends ServerFactory {
 
   public function path($path = '') {
     if (empty($path)) {
-      parent::path($this->_db);
+      return parent::path($this->_db);
     }
-    return parent::path($this->_db) . '/' . $path;
+    return parent::path($this->_db . '/' . $path);
   }
 
 }

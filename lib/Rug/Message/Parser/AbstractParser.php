@@ -38,4 +38,11 @@ abstract class AbstractParser {
     return isset($data->ok) ? $data->ok : false;
   }
 
+  public function parse_rev(Response $response) {
+    if ($response->isSuccessful()) {
+      return $this->_decode($response->getHeader('Etag'));
+    }
+    throw new RugException('not_found', 'The specified document or revision cannot be found or has been deleted');
+  }
+
 }

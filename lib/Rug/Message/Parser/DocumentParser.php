@@ -3,19 +3,11 @@
 namespace Rug\Message\Parser;
 
 use Buzz\Message\Response;
-use Rug\Exception\RugException;
 
 class DocumentParser extends AbstractParser {
 
   public function parse(Response $response) {
     return $this->_parse($response);
-  }
-
-  public function parse_head(Response $response) {
-    if ($response->isSuccessful()) {
-      return $this->_decode($response->getHeader('Etag'));
-    }
-    throw new RugException('not_found', 'The specified document or revision cannot be found or has been deleted');
   }
 
   public function parse_revs(Response $response) {

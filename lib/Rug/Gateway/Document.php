@@ -18,10 +18,6 @@ class Document extends AbstractDocument {
 
   /********************************************************************************************************************/
 
-  public function rev() {
-    return $this->_invoke('_head', self::METHOD_HEAD);
-  }
-
   public function revs() {
     return $this->_invoke('_revs', self::METHOD_GET, '', array(
       'revs' => 'true',

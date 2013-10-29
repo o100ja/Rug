@@ -19,9 +19,9 @@ class DocumentFactory extends DatabaseFactory {
 
   public function path($path = '') {
     if (empty($path)) {
-      parent::path($this->_id);
+      return parent::path($this->_id);
     }
-    return parent::path($this->_id) . '/' . $path;
+    return parent::path($this->_id . '/' . $path);
   }
 
 }
