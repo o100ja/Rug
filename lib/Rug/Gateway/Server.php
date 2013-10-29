@@ -12,7 +12,9 @@ class Server extends AbstractGateway {
   /********************************************************************************************************************/
 
   public function __construct(Connector $connector, $db = null) {
-    parent::__construct($connector, new ServerFactory($connector), new ServerParser());
+    parent::__construct($connector);
+    $this->_setFactory(new ServerFactory($connector));
+    $this->_setParser(new ServerParser());
     $this->_name = $db;
   }
 

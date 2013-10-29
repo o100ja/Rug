@@ -7,13 +7,6 @@ use Rug\Gateway\Server;
 
 class Rug {
 
-  const METHOD_GET    = 'GET';
-  const METHOD_HEAD   = 'HEAD';
-  const METHOD_POST   = 'POST';
-  const METHOD_PUT    = 'PUT';
-  const METHOD_DELETE = 'DELETE';
-  const METHOD_COPY   = 'COPY';
-
   /**
    * @var Server
    */

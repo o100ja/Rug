@@ -6,23 +6,14 @@ use Rug\Exception\RugException;
 use Rug\Message\Factory\DocumentFactory;
 use Rug\Message\Parser\DocumentParser;
 
-class Document extends AbstractGateway {
+class Document extends AbstractDocument {
 
-  private $_db;
-  private $_id;
+  /********************************************************************************************************************/
 
   public function __construct(Connector $connector, $db, $id) {
-    parent::__construct($connector, new DocumentFactory($connector, $db, $id), new DocumentParser());
-    $this->_db = $db;
-    $this->_id = $id;
-  }
-
-  public function getDBName() {
-    return $this->_db;
-  }
-
-  public function getID() {
-    return $this->_id;
+    parent::__construct($connector, $db, $id);
+    $this->_setFactory(new DocumentFactory($connector, $db, $id));
+    $this->_setParser(new DocumentParser());
   }
 
   /********************************************************************************************************************/

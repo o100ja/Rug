@@ -4,7 +4,7 @@ namespace Rug\Message\Factory;
 
 use Rug\Connector\Connector;
 
-class DatabaseFactory extends AbstractFactory {
+class DatabaseFactory extends ServerFactory {
 
   protected $_db;
 
@@ -17,13 +17,11 @@ class DatabaseFactory extends AbstractFactory {
     return $this->_db;
   }
 
-//
-//  public function setDB($db) {
-//    return $this->_db = $db;
-//  }
-
-  public function createURL($path = '', array $parameters = array()) {
-    return $this->_url($this->_root($this->_db . '/' . $path), $parameters);
+  protected function _path($path = '') {
+    if (empty($path)) {
+      parent::_path($this->_db);
+    }
+    return parent::_path($this->_db) . '/' . $path;
   }
 
 }

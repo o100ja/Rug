@@ -34,11 +34,33 @@ abstract class AbstractGateway {
 
   /********************************************************************************************************************/
 
-  public function __construct(Connector $connector, AbstractFactory $factory, AbstractParser $parser) {
+  public function __construct(Connector $connector) {
     $this->_connector = $connector;
-    $this->_factory   = $factory;
-    $this->_parser    = $parser;
     $this->_validator = new RugValidator();
+  }
+
+  /**
+   * @param AbstractFactory $factory
+   */
+  protected function _setFactory($factory) {
+    $this->_factory = $factory;
+    return $this;
+  }
+
+  /**
+   * @param AbstractParser $parser
+   */
+  protected function _setParser($parser) {
+    $this->_parser = $parser;
+    return $this;
+  }
+
+  /**
+   * @param RugValidator $validator
+   */
+  protected function _setValidator($validator) {
+    $this->_validator = $validator;
+    return $this;
   }
 
   /********************************************************************************************************************/

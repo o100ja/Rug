@@ -17,8 +17,11 @@ class DocumentFactory extends DatabaseFactory {
     return $this->_id;
   }
 
-  public function createURL($path = '', array $parameters = array()) {
-    return $this->_url($this->_root($this->_db . '/' . $this->_id . '/' . $path), $parameters);
+  protected function _path($path = '') {
+    if (empty($path)) {
+      parent::_path($this->_id);
+    }
+    return parent::_path($this->_id) . '/' . $path;
   }
 
 }

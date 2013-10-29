@@ -73,11 +73,13 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
     return $this;
   }
 
-  protected function _root($path = '') {
+  private function _root($path = '') {
     return ($this->isSSL() ? 'https' : 'http') . '://' . $this->_host . ':' . $this->_port . $this->_path . $path;
   }
 
-  protected function _url($url, array $parameters = array()) {
+  abstract protected function _path($path = '');
+
+  private function _url($url, array $parameters = array()) {
     if (empty($parameters)) {
       return new Url($url);
     }
@@ -89,7 +91,9 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
    * @param array $parameters
    * @return Url
    */
-  abstract public function createURL($path = null, array $parameters = array());
+  public function createURL($path = '', array $parameters = array()) {
+    return $this->_url($this->_root($this->_path($path)), $parameters);
+  }
 
   public function createCDBRequest(
     $method, $path = '', array $params = array(), $content = null, $headers = array(),

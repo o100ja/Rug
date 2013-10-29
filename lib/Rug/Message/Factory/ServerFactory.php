@@ -4,8 +4,8 @@ namespace Rug\Message\Factory;
 
 class ServerFactory extends AbstractFactory {
 
-  public function createURL($path = '', array $parameters = array()) {
-    return $this->_url($this->_root($path), $parameters);
+  protected function _path($path = '') {
+    return $path;
   }
 
 }

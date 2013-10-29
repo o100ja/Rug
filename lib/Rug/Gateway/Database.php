@@ -12,7 +12,9 @@ class Database extends AbstractGateway {
   /********************************************************************************************************************/
 
   public function __construct(Connector $connector, $db) {
-    parent::__construct($connector, new DatabaseFactory($connector, $db), new DatabaseParser());
+    parent::__construct($connector);
+    $this->_setFactory(new DatabaseFactory($connector, $db));
+    $this->_setParser(new DatabaseParser());
     $this->_name = $db;
   }
 
