@@ -17,11 +17,11 @@ class DocumentFactory extends DatabaseFactory {
     return $this->_id;
   }
 
-  protected function _path($path = '') {
+  public function path($path = '') {
     if (empty($path)) {
-      parent::_path($this->_id);
+      parent::path($this->_id);
     }
-    return parent::_path($this->_id) . '/' . $path;
+    return parent::path($this->_id) . '/' . $path;
   }
 
 }

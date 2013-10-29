@@ -4,7 +4,7 @@ namespace Rug\Message\Factory;
 
 class ServerFactory extends AbstractFactory {
 
-  protected function _path($path = '') {
+  public function path($path = '') {
     return $path;
   }
 

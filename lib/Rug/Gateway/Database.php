@@ -33,6 +33,14 @@ class Database extends AbstractGateway {
     return new Document($this->_connector, $this->_name, $this->_validator()->id($id));
   }
 
+  /**
+   * @param $name
+   * @return Design
+   */
+  public function design($name) {
+    return new Design($this->_connector, $this->_name, $this->_validator()->name($name));
+  }
+
   /********************************************************************************************************************/
 
   public function status() {

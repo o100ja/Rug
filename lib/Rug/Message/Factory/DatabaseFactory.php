@@ -17,11 +17,11 @@ class DatabaseFactory extends ServerFactory {
     return $this->_db;
   }
 
-  protected function _path($path = '') {
+  public function path($path = '') {
     if (empty($path)) {
-      parent::_path($this->_db);
+      parent::path($this->_db);
     }
-    return parent::_path($this->_db) . '/' . $path;
+    return parent::path($this->_db) . '/' . $path;
   }
 
 }

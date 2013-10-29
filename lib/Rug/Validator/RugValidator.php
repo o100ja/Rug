@@ -119,6 +119,10 @@ class RugValidator {
     return $this->regexp($name, 'The attachment name', '#^[\w-]+$#');
   }
 
+  public function design($data) {
+    return $this->data($data);
+  }
+
   /********************************************************************************************************************/
 
 }
