@@ -44,12 +44,12 @@ class Database extends AbstractGateway {
   /********************************************************************************************************************/
 
   public function status() {
-    return $this->_call(self::METHOD_GET);
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET);
   }
 
 
   public function missingRevs(array $revs = array()) {
-    return $this->_call(self::METHOD_POST, '_missing_revs', array(), array(
+    return $this->_invoke(__FUNCTION__, self::METHOD_POST, '_missing_revs', array(), array(
       'keys' => $revs,
     ));
   }
@@ -61,7 +61,7 @@ class Database extends AbstractGateway {
     if (!empty($ids)) {
       $parameters['doc_ids'] = json_encode($ids);
     }
-    return $this->_call(self::METHOD_GET, '_changes', $parameters);
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_changes', $parameters);
   }
 
   /**
@@ -74,24 +74,24 @@ class Database extends AbstractGateway {
     if (!empty($view)) {
       $path .= $this->_validator()->view($view);
     }
-    return $this->_invoke('_compact', self::METHOD_POST, $path);
+    return $this->_invoke(__FUNCTION__, self::METHOD_POST, $path);
   }
 
   public function commit() {
-    return $this->_call(self::METHOD_POST, '_ensure_full_commit');
+    return $this->_invoke(__FUNCTION__, self::METHOD_POST, '_ensure_full_commit');
   }
 
   /********************************************************************************************************************/
 
   public function getSecurity() {
-    return $this->_call(self::METHOD_GET, '_security');
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_security');
   }
 
   public function setSecurity(
     array $adminRoles = array(), array $adminNames = array(),
     array $readerRoles = array(), array $readerNames = array()
   ) {
-    return $this->_call(self::METHOD_PUT, '_security', array(), array(
+    return $this->_invoke(__FUNCTION__, self::METHOD_PUT, '_security', array(), array(
       'admins'  => array(
         'roles' => $adminRoles,
         'names' => $adminNames,
@@ -106,11 +106,11 @@ class Database extends AbstractGateway {
   /********************************************************************************************************************/
 
   public function getRevsLimit() {
-    return $this->_call(self::METHOD_GET, '_revs_limit');
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_revs_limit');
   }
 
   public function setRevsLimit($limit) {
-    return $this->_call(self::METHOD_GET, '_revs_limit', array(), $limit);
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_revs_limit', array(), $limit);
   }
 
   /********************************************************************************************************************/
@@ -126,7 +126,7 @@ class Database extends AbstractGateway {
     if ($info) {
       $parameters['revs_info'] = 'true';
     }
-    return $this->_invoke('_body', self::METHOD_GET, $this->_validator()->id($id), $parameters);
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET, $this->_validator()->id($id), $parameters);
   }
 
   public function herd(array $ids = null, $includeDocs = true, $deleted = false, $stale = false) {
@@ -137,24 +137,25 @@ class Database extends AbstractGateway {
       $parameters['stale'] = 'ok';
     }
     if (empty($ids)) {
-      $data = $this->_call(self::METHOD_GET, '_all_docs', $parameters);
+      $data = $this->_invoke(__FUNCTION__, self::METHOD_GET, '_all_docs', $parameters);
     } else {
-      $data = $this->_call(self::METHOD_POST, '_all_docs', $parameters, array(
+      $data = $this->_invoke(__FUNCTION__, self::METHOD_POST, '_all_docs', $parameters, array(
         'keys' => $ids,
       ));
     }
     if ($deleted) {
       return $data;
     }
-    $data->rows       = array_filter($data->rows, function ($row) {
+    $data->rows = array_filter($data->rows, function ($row) {
       return empty($row->value->deleted);
     });
+
     $data->total_rows = count($data->rows);
     return $data;
   }
 
   public function bulk(array $docs, $allOrNothing = false) {
-    return $this->_call(self::METHOD_POST, '_bulk_docs', array(), array(
+    return $this->_invoke(__FUNCTION__, self::METHOD_POST, '_bulk_docs', array(), array(
       'docs'           => $docs,
       'all_or_nothing' => $this->_validator()->boolean($allOrNothing),
     ));
@@ -165,14 +166,14 @@ class Database extends AbstractGateway {
     if ($batch) {
       $parameters['batch'] = 'ok';
     }
-    return $this->_invoke('_head', self::METHOD_POST, '', $parameters, $this->_validator()->doc($doc));
+    return $this->_invoke(__FUNCTION__, self::METHOD_POST, '', $parameters, $this->_validator()->doc($doc));
   }
 
   public function kill($id, $rev = null) {
     if (empty($rev)) {
       $rev = $this->doc($id)->rev();
     }
-    return $this->_invoke('_head', self::METHOD_DELETE, $this->_validator()->id($id), array(
+    return $this->_invoke(__FUNCTION__, self::METHOD_DELETE, $this->_validator()->id($id), array(
       'rev' => $this->_validator()->rev($rev)
     ));
   }
@@ -181,7 +182,7 @@ class Database extends AbstractGateway {
     if (empty($revs)) {
       $revs = $this->doc($id)->revs();
     }
-    return $this->_call(self::METHOD_POST, '_purge', array(), array(
+    return $this->_invoke(__FUNCTION__, self::METHOD_POST, '_purge', array(), array(
       $id => $revs,
     ));
   }

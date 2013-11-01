@@ -103,17 +103,18 @@ abstract class AbstractGateway {
     return $this->_invoke($path, $method, $path, $params, $content, $headers, $mime);
   }
 
-  protected function _invoke(
-    $parser, $method, $path = '', array $params = array(), $content = null, $headers = array(), $mime = 'application/json'
+  protected function _invoke($handler,
+                             $method, $path = '', array $params = array(),
+                             $content = null, $headers = array(), $mime = 'application/json'
   ) {
-    return $this->_parser()->handle(
-      $this->_send($method, $path, $params, $content, $headers, $mime), $parser
-    );
+    $response = $this->_send($method, $path, $params, $content, $headers, $mime, $handler);
+    return $this->_parser()->handle($response, $handler);
   }
 
   protected function _send(
     $method, $path = '', array $params = array(), $content = null, $headers = array(),
-    $mime = 'application/json', $parser = null
+    $mime = 'application/json',
+    $parser = null
   ) {
     $options  = array();
     $request  = $this->_factory->createCDBRequest(

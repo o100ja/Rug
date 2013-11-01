@@ -25,11 +25,14 @@ class Design extends AbstractDocument {
 
   public function save($data) {
     $parameters = array();
-    return $this->_invoke('_head', self::METHOD_PUT, '', $parameters, $this->_validator()->design($data));
+    return $this->_invoke(__FUNCTION__, self::METHOD_PUT, '', $parameters, $this->_validator()->design($data));
   }
 
   public function info() {
-    return $this->_invoke('_info', self::METHOD_GET, '_info');
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_info');
   }
+
+  /********************************************************************************************************************/
+
 }
  

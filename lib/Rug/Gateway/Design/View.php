@@ -40,7 +40,7 @@ class View extends AbstractGateway {
     if (!empty($limit)) {
       $parameters['limit'] = $limit;
     }
-    return $this->_invoke('', self::METHOD_GET, '', $parameters);
+    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '', $parameters);
   }
 
   public function fetchAll(

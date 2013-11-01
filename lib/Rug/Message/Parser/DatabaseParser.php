@@ -6,37 +6,87 @@ use Buzz\Message\Response;
 
 class DatabaseParser extends AbstractParser {
 
-  public function parse(Response $response) {
-    return $this->_parse($response);
-  }
-
-  public function parse_all_docs(Response $response) {
+  public function status(Response $response) {
     $data = $this->_parse($response);
     return $data;
   }
 
-  public function parse_ensure_full_commit(Response $response) {
-    return $this->_parseClearOK($response);
-  }
-
-  public function parse_compact(Response $response) {
-    return $this->_parse($response);
-  }
-
-  public function parse_security(Response $response) {
-    return $this->_parse($response);
-  }
-
-  public function parse_missing_revs(Response $response) {
+  public function missingRevs(Response $response) {
     return $this->_parse($response)->missing_revs->keys;
   }
 
-  public function parse_head(Response $response) {
+  /********************************************************************************************************************/
+
+  public function changes(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  public function compact(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  public function commit(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  /********************************************************************************************************************/
+
+  public function getSecurity(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  public function setSecurity(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  /********************************************************************************************************************/
+
+  public function getRevsLimit(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  public function setRevsLimit(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  /********************************************************************************************************************/
+
+  public function find(Response $response) {
     return $this->_parseClearOK($response);
   }
 
-  public function parse_body(Response $response) {
-    return $this->_parseClearOK($response);
+  public function herd(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
   }
+
+  public function bulk(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  public function save(Response $response) {
+    $data = $this->_parseClearOK($response);
+    return $data;
+  }
+
+  public function kill(Response $response) {
+    $data = $this->_parseClearOK($response);
+    return $data;
+  }
+
+  public function bury(Response $response) {
+    $data = $this->_parse($response);
+    return $data;
+  }
+
+  /********************************************************************************************************************/
 
 }

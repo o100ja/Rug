@@ -7,8 +7,7 @@ use Rug\Exception\RugException;
 
 abstract class AbstractParser {
 
-  public function handle(Response $response, $action) {
-    $method = "parse$action";
+  public function handle(Response $response, $method) {
     if (method_exists($this, $method)) {
       return $this->$method($response);
     }
@@ -36,13 +35,6 @@ abstract class AbstractParser {
   protected function _parseOK(Response $response) {
     $data = $this->_parse($response);
     return isset($data->ok) ? $data->ok : false;
-  }
-
-  public function parse_rev(Response $response) {
-    if ($response->isSuccessful()) {
-      return $this->_decode($response->getHeader('Etag'));
-    }
-    throw new RugException('not_found', 'The specified document or revision cannot be found or has been deleted');
   }
 
 }
