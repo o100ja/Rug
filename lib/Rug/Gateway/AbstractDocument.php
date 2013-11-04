@@ -35,6 +35,8 @@ abstract class AbstractDocument extends AbstractGateway {
     ));
   }
 
+  /********************************************************************************************************************/
+
   public function data($rev = null, $conflicts = false, $info = false) {
     $parameters = array();
     if (!empty($rev)) {
