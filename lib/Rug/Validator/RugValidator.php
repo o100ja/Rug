@@ -26,7 +26,7 @@ class RugValidator {
     return $string;
   }
 
-  public function regexp($string, $prefix = 'The string', $pattern = '#^\w+$#') {
+  public function regexp($string, $prefix = 'The string', $pattern = '#^[\w-]+$#') {
     $string = $this->string($string, $prefix);
     if (!preg_match($pattern, $string)) {
       throw new InvalidArgumentException($prefix . ' in invalid');
@@ -84,11 +84,11 @@ class RugValidator {
   }
 
   public function rev($rev) {
-    return $this->regexp($rev, 'The document revision', '#^[\w-]+$#');
+    return $this->regexp($rev, 'The document revision');
   }
 
   public function attribute($name) {
-    return $this->regexp($name, 'The attribute name', '#^[\w-]+$#');
+    return $this->regexp($name, 'The attribute name');
   }
 
   public function view($view) {
@@ -116,7 +116,7 @@ class RugValidator {
   }
 
   public function name($name) {
-    return $this->regexp($name, 'The attachment name', '#^[\w-]+$#');
+    return $this->regexp($name, 'The attachment name');
   }
 
   public function design($data) {
