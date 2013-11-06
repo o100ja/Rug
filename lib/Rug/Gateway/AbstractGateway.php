@@ -41,24 +41,27 @@ abstract class AbstractGateway {
 
   /**
    * @param AbstractFactory $factory
+   * @return $this
    */
-  protected function _setFactory($factory) {
+  protected function _setFactory(AbstractFactory $factory) {
     $this->_factory = $factory;
     return $this;
   }
 
   /**
    * @param AbstractParser $parser
+   * @return $this
    */
-  protected function _setParser($parser) {
+  protected function _setParser(AbstractParser $parser) {
     $this->_parser = $parser;
     return $this;
   }
 
   /**
    * @param RugValidator $validator
+   * @return $this
    */
-  protected function _setValidator($validator) {
+  protected function _setValidator(RugValidator $validator) {
     $this->_validator = $validator;
     return $this;
   }
@@ -88,24 +91,23 @@ abstract class AbstractGateway {
 
   /********************************************************************************************************************/
 
+  protected function _encode($data) {
+    return $this->_factory()->encode($data);
+  }
+
   /**
-   * @param $method
+   * @param string $handler
+   * @param string $method
    * @param string $path
    * @param array $params
    * @param null $content
    * @param array $headers
+   * @param string $mime
    * @return mixed
    */
-  protected function _call(
-    $method, $path = '', array $params = array(), $content = null, $headers = array(),
-    $mime = 'application/json'
-  ) {
-    return $this->_invoke($path, $method, $path, $params, $content, $headers, $mime);
-  }
-
-  protected function _invoke($handler,
-                             $method, $path = '', array $params = array(),
-                             $content = null, $headers = array(), $mime = 'application/json'
+  protected function _call($handler = '',
+                           $method = self::METHOD_GET, $path = '', array $params = array(),
+                           $content = null, $headers = array(), $mime = 'application/json'
   ) {
     $response = $this->_send($method, $path, $params, $content, $headers, $mime, $handler);
     return $this->_parser()->handle($response, $handler);

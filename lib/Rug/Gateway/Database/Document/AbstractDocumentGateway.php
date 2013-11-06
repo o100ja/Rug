@@ -1,24 +1,31 @@
 <?php
-namespace Rug\Gateway;
+
+namespace Rug\Gateway\Database\Document;
 
 use Rug\Connector\Connector;
 use Rug\Exception\RugException;
+use Rug\Gateway\Database\AbstractDatabaseGateway;
 
-abstract class AbstractDocument extends AbstractGateway {
+abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
 
-  private $_db;
+  /**
+   * @var string
+   */
   private $_id;
 
+  /**
+   * @param Connector $connector
+   * @param string $db
+   * @param string $id
+   */
   public function __construct(Connector $connector, $db, $id) {
-    parent::__construct($connector);
-    $this->_db = $db;
+    parent::__construct($connector, $db);
     $this->_id = $id;
   }
 
-  public function getDB() {
-    return $this->_db;
-  }
-
+  /**
+   * @return string
+   */
   public function getID() {
     return $this->_id;
   }
@@ -26,11 +33,11 @@ abstract class AbstractDocument extends AbstractGateway {
   /********************************************************************************************************************/
 
   public function rev() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_HEAD);
+    return $this->_call(__FUNCTION__, self::METHOD_HEAD);
   }
 
   public function revs() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '', array(
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '', array(
       'revs' => 'true',
     ));
   }
@@ -48,14 +55,14 @@ abstract class AbstractDocument extends AbstractGateway {
     if ($info) {
       $parameters['revs_info'] = 'true';
     }
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, $parameters);
+    return $this->_call(__FUNCTION__, self::METHOD_GET, $parameters);
   }
 
   public function kill($rev = null) {
     if (empty($rev)) {
       $rev = $this->rev();
     }
-    return $this->_invoke(__FUNCTION__, self::METHOD_DELETE, '', array(
+    return $this->_call(__FUNCTION__, self::METHOD_DELETE, '', array(
       'rev' => $this->_validator()->rev($rev)
     ));
   }
@@ -70,7 +77,7 @@ abstract class AbstractDocument extends AbstractGateway {
             'rev' => $this->_validator()->rev($dstRev)
           ))
     );
-    return $this->_invoke(__FUNCTION__, self::METHOD_COPY, '', $parameters, null, $headers);
+    return $this->_call(__FUNCTION__, self::METHOD_COPY, '', $parameters, null, $headers);
   }
 
   /********************************************************************************************************************/
@@ -102,7 +109,7 @@ abstract class AbstractDocument extends AbstractGateway {
     if (empty($rev)) {
       $rev = $this->rev();
     }
-    return $this->_invoke(__FUNCTION__, self::METHOD_PUT, $this->_validator()->name($name), array(
+    return $this->_call(__FUNCTION__, self::METHOD_PUT, $this->_validator()->name($name), array(
       'rev' => $this->_validator()->rev($rev),
     ), $file, array(), $mime);
   }
@@ -111,7 +118,7 @@ abstract class AbstractDocument extends AbstractGateway {
     if (empty($rev)) {
       $rev = $this->rev();
     }
-    return $this->_invoke(__FUNCTION__, self::METHOD_DELETE, $name, array(
+    return $this->_call(__FUNCTION__, self::METHOD_DELETE, $name, array(
       'rev' => $this->_validator()->rev($rev),
     ));
   }

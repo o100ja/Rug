@@ -3,8 +3,8 @@ namespace Rug\Connector;
 
 use Buzz\Client\ClientInterface;
 use Buzz\Client\Curl;
-use Buzz\Message\MessageInterface;
-use Buzz\Message\RequestInterface;
+use Buzz\Message\Request;
+use Buzz\Message\Response;
 use Buzz\Util\CookieJar;
 
 class Connector {
@@ -97,7 +97,7 @@ class Connector {
 
   /********************************************************************************************************************/
 
-  public function send(RequestInterface $request, MessageInterface $response, array $options = array()) {
+  public function send(Request $request, Response $response, array $options = array()) {
     $this->_client->send($request, $response, $options);
     return $response;
   }

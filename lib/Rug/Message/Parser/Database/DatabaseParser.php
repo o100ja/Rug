@@ -1,10 +1,12 @@
 <?php
 
-namespace Rug\Message\Parser;
+namespace Rug\Message\Parser\Database;
 
 use Buzz\Message\Response;
 
-class DatabaseParser extends AbstractParser {
+class DatabaseParser extends AbstractDatabaseParser {
+
+  /********************************************************************************************************************/
 
   public function status(Response $response) {
     $data = $this->_parse($response);

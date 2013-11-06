@@ -25,6 +25,7 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
   private $_fInfo;
 
   /**
+   * @param \SplFileInfo $file
    * @return string
    */
   protected function _mime(\SplFileInfo $file) {
@@ -32,6 +33,10 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
       $this->_fInfo = new \finfo(FILEINFO_MIME_TYPE);
     }
     return $this->_fInfo->file($file->getRealPath());
+  }
+
+  public function encode($data) {
+    return json_encode($data);
   }
 
   /********************************************************************************************************************/
@@ -54,6 +59,7 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
    * @param $method
    * @param string $resource
    * @param null $host
+   * @return \Buzz\Message\Form\FormRequest|void
    * @throws \RuntimeException
    */
   public function createFormRequest($method = RequestInterface::METHOD_POST, $resource = '/', $host = null) {
@@ -65,9 +71,9 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
       return $this;
     }
     if (is_array($content)) {
-      $content = json_encode((object)$content);
+      $content = $this->encode((object)$content);
     } else if (is_object($content)) {
-      $content = json_encode($content);
+      $content = $this->encode($content);
     }
     $request->setContent($content);
     return $this;
@@ -87,7 +93,7 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
   }
 
   /**
-   * @param null $path
+   * @param string $path
    * @param array $parameters
    * @return Url
    */

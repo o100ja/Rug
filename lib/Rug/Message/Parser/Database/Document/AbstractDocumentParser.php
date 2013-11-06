@@ -1,11 +1,26 @@
 <?php
 
-namespace Rug\Message\Parser;
+namespace Rug\Message\Parser\Database\Document;
 
 use Buzz\Message\Response;
 use Rug\Exception\RugException;
+use Rug\Message\Parser\Database\AbstractDatabaseParser;
 
-class AbstractDocumentParser extends AbstractParser {
+class AbstractDocumentParser extends AbstractDatabaseParser {
+
+  private $_id;
+
+  public function __construct($db, $id) {
+    parent::__construct($db);
+    $this->_id = $id;
+  }
+
+  /**
+   * @return string
+   */
+  public function getID() {
+    return $this->_id;
+  }
 
   /********************************************************************************************************************/
 

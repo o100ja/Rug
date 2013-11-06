@@ -2,12 +2,13 @@
 namespace Rug\Gateway;
 
 use Rug\Connector\Connector;
+use Rug\Gateway\Database\DatabaseGateway;
 use Rug\Message\Factory\ServerFactory;
 use Rug\Message\Parser\ServerParser;
 
-class Server extends AbstractGateway {
+class ServerGateway extends AbstractGateway {
 
-  private $_name;
+  private $_db;
 
   /********************************************************************************************************************/
 
@@ -15,31 +16,31 @@ class Server extends AbstractGateway {
     parent::__construct($connector);
     $this->_setFactory(new ServerFactory($connector));
     $this->_setParser(new ServerParser());
-    $this->_name = $db;
+    $this->_db = $db;
   }
 
   /********************************************************************************************************************/
 
   public function getDefaultDB() {
-    return $this->_name;
+    return $this->_db;
   }
 
   /**
    * @param string|null $name
-   * @return Database
+   * @return DatabaseGateway
    */
   public function db($name = null) {
-    return new Database($this->_connector, empty($name) ? $this->_name : $name);
+    return new DatabaseGateway($this->_connector, empty($name) ? $this->_db : $name);
   }
 
   /********************************************************************************************************************/
 
   /**
    * @param $name
-   * @return Database
+   * @return DatabaseGateway
    */
   public function createDB($name) {
-    $this->_invoke(__FUNCTION__, self::METHOD_PUT, $this->_validator()->dbName($name));
+    $this->_call(__FUNCTION__, self::METHOD_PUT, $this->_validator()->dbName($name));
     return $this->db($name);
   }
 
@@ -48,7 +49,7 @@ class Server extends AbstractGateway {
    * @return $this
    */
   public function deleteDB($name) {
-    $this->_invoke(__FUNCTION__, self::METHOD_DELETE, $this->_validator()->dbName($name));
+    $this->_call(__FUNCTION__, self::METHOD_DELETE, $this->_validator()->dbName($name));
     return $this;
   }
 
@@ -56,7 +57,7 @@ class Server extends AbstractGateway {
    * @return array
    */
   public function gatherDB() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_all_dbs');
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '_all_dbs');
   }
 
   /********************************************************************************************************************/
@@ -66,7 +67,7 @@ class Server extends AbstractGateway {
    * @return string[]
    */
   public function uuids($count = 1) {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_uuids', array(
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '_uuids', array(
       'count' => $this->_validator()->count($count)
     ));
   }
@@ -81,7 +82,7 @@ class Server extends AbstractGateway {
   /********************************************************************************************************************/
 
   public function restart() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_POST, '_restart');
+    return $this->_call(__FUNCTION__, self::METHOD_POST, '_restart');
   }
 
   /********************************************************************************************************************/
@@ -90,32 +91,32 @@ class Server extends AbstractGateway {
    * @return string
    */
   public function version() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET);
+    return $this->_call(__FUNCTION__, self::METHOD_GET);
   }
 
   /********************************************************************************************************************/
 
   public function tasks() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_active_tasks');
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '_active_tasks');
   }
 
   public function updates() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_db_updates');
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '_db_updates');
   }
 
   public function log($bytes = 1000, $offset = 0) {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_log', array(
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '_log', array(
       'bytes'  => $bytes,
       'offset' => $offset,
     ));
   }
 
   public function stats() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_stats');
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '_stats');
   }
 
   public function session() {
-    return $this->_invoke(__FUNCTION__, self::METHOD_GET, '_session');
+    return $this->_call(__FUNCTION__, self::METHOD_GET, '_session');
   }
 
   /********************************************************************************************************************/
@@ -133,7 +134,7 @@ class Server extends AbstractGateway {
         $post->filterQueryParams = $params;
       }
     }
-    return $this->_invoke(__FUNCTION__, self::METHOD_POST, '_replicate', array(), $post);
+    return $this->_call(__FUNCTION__, self::METHOD_POST, '_replicate', array(), $post);
   }
 
   /********************************************************************************************************************/
