@@ -7,6 +7,7 @@ use Rug\Gateway\Database\Document\AbstractDocumentGateway;
 
 abstract class AbstractDesignGateway extends AbstractDocumentGateway {
 
+
   /**
    * @var string
    */

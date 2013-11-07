@@ -1,6 +1,7 @@
 <?php
 namespace Rug\Gateway;
 
+use Buzz\Message\Response;
 use Rug\Connector\Connector;
 use Rug\Message\Factory\AbstractFactory;
 use Rug\Message\Parser\AbstractParser;
@@ -8,12 +9,18 @@ use Rug\Validator\RugValidator;
 
 abstract class AbstractGateway {
 
+  /********************************************************************************************************************/
+
   const METHOD_GET    = 'GET';
   const METHOD_HEAD   = 'HEAD';
   const METHOD_POST   = 'POST';
   const METHOD_PUT    = 'PUT';
   const METHOD_DELETE = 'DELETE';
   const METHOD_COPY   = 'COPY';
+
+  /********************************************************************************************************************/
+
+  const MIME_JSON = 'application/json';
 
   /********************************************************************************************************************/
 
@@ -95,6 +102,10 @@ abstract class AbstractGateway {
     return $this->_factory()->encode($data);
   }
 
+  protected function _parse(Response $response, $handler, $mime = self::MIME_JSON) {
+    return $this->_parser()->handle($response, $handler, $mime);
+  }
+
   /**
    * @param string $handler
    * @param string $method
@@ -107,15 +118,15 @@ abstract class AbstractGateway {
    */
   protected function _call($handler = '',
                            $method = self::METHOD_GET, $path = '', array $params = array(),
-                           $content = null, $headers = array(), $mime = 'application/json'
+                           $content = null, $headers = array(), $mime = self::MIME_JSON
   ) {
     $response = $this->_send($method, $path, $params, $content, $headers, $mime, $handler);
-    return $this->_parser()->handle($response, $handler);
+    return $this->_parse($response, $handler, $mime);
   }
 
   protected function _send(
     $method, $path = '', array $params = array(), $content = null, $headers = array(),
-    $mime = 'application/json',
+    $mime = self::MIME_JSON,
     $parser = null
   ) {
     $options  = array();

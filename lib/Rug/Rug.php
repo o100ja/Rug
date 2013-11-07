@@ -1,8 +1,8 @@
 <?php
 namespace Rug;
 
-define('RUG_MAX', new \stdClass());
-define('RUG_MIN', null);
+//define('RUG_MAX', []);
+//define('RUG_MIN', null);
 
 use Buzz\Client\ClientInterface;
 use Rug\Connector\Connector;
