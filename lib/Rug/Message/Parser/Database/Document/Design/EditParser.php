@@ -4,7 +4,7 @@ namespace Rug\Message\Parser\Database\Document\Design;
 
 use Buzz\Message\Response;
 
-class EditParser extends AbstractDesignParser {
+class EditParser extends AbstractSectionParser {
 
   public function save(Response $response, $mime = self::MIME_JSON) {
     $oldRev = $this->_parse($response, $mime);

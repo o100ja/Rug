@@ -5,7 +5,7 @@ namespace Rug\Message\Parser\Database\Document\Design;
 use Buzz\Message\Response;
 use Rug\Record\ViewVector;
 
-class ViewParser extends AbstractDesignParser {
+class ViewParser extends AbstractSectionParser {
 
   public function _get(Response $response) {
     $data = $this->_parse($response);

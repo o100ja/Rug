@@ -1,6 +1,6 @@
 <?php
 
-namespace Rug\Message\Factory;
+namespace Rug\Message\Factory\Database\Document;
 
 use Rug\Connector\Connector;
 

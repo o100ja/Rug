@@ -4,7 +4,7 @@ namespace Rug\Message\Parser\Database\Document\Design;
 
 use Rug\Message\Parser\Database\Document\AbstractDocumentParser;
 
-class AbstractDesignParser extends AbstractDocumentParser {
+class AbstractSectionParser extends AbstractDocumentParser {
 
   /**
    * @var string

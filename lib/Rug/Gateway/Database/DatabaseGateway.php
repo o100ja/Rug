@@ -5,7 +5,7 @@ namespace Rug\Gateway\Database;
 use Rug\Connector\Connector;
 use Rug\Gateway\Database\Document\DesignGateway;
 use Rug\Gateway\Database\Document\DocumentGateway;
-use Rug\Message\Factory\DatabaseFactory;
+use Rug\Message\Factory\Database\DatabaseFactory;
 use Rug\Message\Parser\Database\DatabaseParser;
 
 class DatabaseGateway extends AbstractDatabaseGateway {

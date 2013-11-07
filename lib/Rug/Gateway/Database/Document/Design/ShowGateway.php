@@ -3,10 +3,10 @@
 namespace Rug\Gateway\Database\Document\Design;
 
 use Rug\Connector\Connector;
-use Rug\Message\Factory\Design\ShowFactory;
+use Rug\Message\Factory\Database\Document\Design\ShowFactory;
 use Rug\Message\Parser\Database\Document\Design\ShowParser;
 
-class ShowGateway extends AbstractDesignGateway {
+class ShowGateway extends AbstractSectionGateway {
 
   /********************************************************************************************************************/
 

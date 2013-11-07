@@ -1,8 +1,9 @@
 <?php
 
-namespace Rug\Message\Factory;
+namespace Rug\Message\Factory\Database\Document;
 
 use Rug\Connector\Connector;
+use Rug\Message\Factory\Database\DatabaseFactory;
 
 class DocumentFactory extends DatabaseFactory {
 

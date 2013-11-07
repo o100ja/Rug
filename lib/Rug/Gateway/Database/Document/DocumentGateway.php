@@ -3,7 +3,7 @@
 namespace Rug\Gateway\Database\Document;
 
 use Rug\Connector\Connector;
-use Rug\Message\Factory\DocumentFactory;
+use Rug\Message\Factory\Database\Document\DocumentFactory;
 use Rug\Message\Parser\Database\Document\DocumentParser;
 
 class DocumentGateway extends AbstractDocumentGateway {

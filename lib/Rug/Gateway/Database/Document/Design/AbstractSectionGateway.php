@@ -5,7 +5,7 @@ namespace Rug\Gateway\Database\Document\Design;
 use Rug\Connector\Connector;
 use Rug\Gateway\Database\Document\AbstractDocumentGateway;
 
-abstract class AbstractDesignGateway extends AbstractDocumentGateway {
+abstract class AbstractSectionGateway extends AbstractDocumentGateway {
 
 
   /**

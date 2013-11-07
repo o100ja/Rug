@@ -7,7 +7,7 @@ use Rug\Gateway\Database\Document\Design\EditGateway;
 use Rug\Gateway\Database\Document\Design\ListGateway;
 use Rug\Gateway\Database\Document\Design\ShowGateway;
 use Rug\Gateway\Database\Document\Design\ViewGateway;
-use Rug\Message\Factory\DesignFactory;
+use Rug\Message\Factory\Database\Document\DesignFactory;
 use Rug\Message\Parser\Database\Document\DesignParser;
 
 class DesignGateway extends AbstractDocumentGateway {

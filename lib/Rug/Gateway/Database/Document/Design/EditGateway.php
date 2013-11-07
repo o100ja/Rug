@@ -3,10 +3,10 @@
 namespace Rug\Gateway\Database\Document\Design;
 
 use Rug\Connector\Connector;
-use Rug\Message\Factory\Design\EditFactory;
+use Rug\Message\Factory\Database\Document\Design\EditFactory;
 use Rug\Message\Parser\Database\Document\Design\EditParser;
 
-class EditGateway extends AbstractDesignGateway {
+class EditGateway extends AbstractSectionGateway {
 
   /********************************************************************************************************************/
 

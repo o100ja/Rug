@@ -3,11 +3,11 @@
 namespace Rug\Gateway\Database\Document\Design;
 
 use Rug\Connector\Connector;
-use Rug\Message\Factory\Design\ViewFactory;
+use Rug\Message\Factory\Database\Document\Design\ViewFactory;
 use Rug\Message\Parser\Database\Document\Design\ViewParser;
 use Rug\Record\ViewVector;
 
-class ViewGateway extends AbstractDesignGateway {
+class ViewGateway extends AbstractSectionGateway {
 
 
   /********************************************************************************************************************/

@@ -1,8 +1,9 @@
 <?php
 
-namespace Rug\Message\Factory;
+namespace Rug\Message\Factory\Database;
 
 use Rug\Connector\Connector;
+use Rug\Message\Factory\ServerFactory;
 
 class DatabaseFactory extends ServerFactory {
 
