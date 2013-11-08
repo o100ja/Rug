@@ -1,8 +1,8 @@
 {
   "name": "o100ja/rug",
-  "description": "PHP CouchDB client",
-  "keywords": ["couchdb", "http"],
   "type": "library",
+  "description": "PHP CouchDB client",
+  "keywords": ["couchdb", "php"],
   "license": "MIT",
   "authors": [
     {
