@@ -1,6 +1,7 @@
 <?php
 namespace Rug\Gateway;
 
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Gateway\Database\DatabaseGateway;
 use Rug\Message\Factory\ServerFactory;
@@ -8,19 +9,25 @@ use Rug\Message\Parser\ServerParser;
 
 class ServerGateway extends AbstractGateway {
 
+  /**
+   * @var string
+   */
   private $_db;
 
   /********************************************************************************************************************/
 
-  public function __construct(Connector $connector, $db = null) {
-    parent::__construct($connector);
-    $this->_setFactory(new ServerFactory($connector));
-    $this->_setParser(new ServerParser());
+  public function __construct(CoderManager $coder, Connector $connector, $db = null) {
+    parent::__construct($coder, $connector);
+    $this->_setFactory(new ServerFactory($coder, $connector));
+    $this->_setParser(new ServerParser($coder));
     $this->_db = $db;
   }
 
   /********************************************************************************************************************/
 
+  /**
+   * @return string
+   */
   public function getDefaultDB() {
     return $this->_db;
   }
@@ -30,7 +37,7 @@ class ServerGateway extends AbstractGateway {
    * @return DatabaseGateway
    */
   public function db($name = null) {
-    return new DatabaseGateway($this->_connector, empty($name) ? $this->_db : $name);
+    return new DatabaseGateway($this->_coder(), $this->_connector(), empty($name) ? $this->_db : $name);
   }
 
   /********************************************************************************************************************/
@@ -81,6 +88,9 @@ class ServerGateway extends AbstractGateway {
 
   /********************************************************************************************************************/
 
+  /**
+   * @return mixed
+   */
   public function restart() {
     return $this->_call(__FUNCTION__, self::METHOD_POST, '_restart');
   }

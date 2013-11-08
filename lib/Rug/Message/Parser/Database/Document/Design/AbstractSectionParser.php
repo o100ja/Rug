@@ -2,6 +2,7 @@
 
 namespace Rug\Message\Parser\Database\Document\Design;
 
+use Rug\Coder\CoderManager;
 use Rug\Message\Parser\Database\Document\AbstractDocumentParser;
 
 class AbstractSectionParser extends AbstractDocumentParser {
@@ -11,13 +12,8 @@ class AbstractSectionParser extends AbstractDocumentParser {
    */
   private $_name;
 
-  /**
-   * @param string $db
-   * @param string $id
-   * @param string $name
-   */
-  public function __construct($db, $id, $name) {
-    parent::__construct($db, $id);
+  public function __construct(CoderManager $coder, $db, $id, $name) {
+    parent::__construct($coder, $db, $id);
     $this->_name = $name;
   }
 

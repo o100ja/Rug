@@ -2,6 +2,7 @@
 
 namespace Rug\Gateway\Database;
 
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Gateway\AbstractGateway;
 
@@ -12,12 +13,8 @@ abstract class AbstractDatabaseGateway extends AbstractGateway {
    */
   private $_db;
 
-  /**
-   * @param Connector $connector
-   * @param string $db
-   */
-  public function __construct(Connector $connector, $db) {
-    parent::__construct($connector);
+  public function __construct(CoderManager $coder, Connector $connector, $db) {
+    parent::__construct($coder, $connector);
     $this->_db = $db;
   }
 

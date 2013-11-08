@@ -2,18 +2,25 @@
 
 namespace Rug\Message\Factory\Database;
 
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Message\Factory\ServerFactory;
 
 class DatabaseFactory extends ServerFactory {
 
+  /**
+   * @var string
+   */
   protected $_db;
 
-  public function __construct(Connector $connector, $db) {
-    parent::__construct($connector);
+  public function __construct(CoderManager $coder, Connector $connector, $db) {
+    parent::__construct($coder, $connector);
     $this->_db = $db;
   }
 
+  /**
+   * @return string
+   */
   public function getDB() {
     return $this->_db;
   }

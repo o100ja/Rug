@@ -35,6 +35,10 @@ class Connector {
 
   /********************************************************************************************************************/
 
+  /**
+   * @param array $options
+   * @param ClientInterface $client
+   */
   public function __construct(array $options = array(), ClientInterface $client = null) {
     $this->_options = (object)array_merge(array(
       'host'    => 'localhost',
@@ -67,39 +71,68 @@ class Connector {
 
   /********************************************************************************************************************/
 
+  /**
+   * @return string
+   */
   public function getHost() {
     return $this->_options->host;
   }
 
+  /**
+   * @return integer
+   */
   public function getPort() {
     return $this->_options->port;
   }
 
+  /**
+   * @return string
+   */
   public function getPath() {
     return $this->_options->path;
   }
 
+  /**
+   * @return integer
+   */
   public function getTimeout() {
     return $this->_options->timeout;
   }
 
+  /**
+   * @return bool
+   */
   public function isSSL() {
     return !empty($this->_options->ssl);
   }
 
+  /**
+   * @return string
+   */
   public function getProxy() {
     return $this->_options->proxy;
   }
 
+  /**
+   * @return bool
+   */
   public function hasProxy() {
     return !empty($this->_options->proxy);
   }
 
   /********************************************************************************************************************/
 
+  /**
+   * @param Request $request
+   * @param Response $response
+   * @param array $options
+   * @return Response
+   */
   public function send(Request $request, Response $response, array $options = array()) {
     $this->_client->send($request, $response, $options);
     return $response;
   }
+
+  /********************************************************************************************************************/
 
 }

@@ -2,6 +2,7 @@
 
 namespace Rug\Message\Factory\Database\Document;
 
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Message\Factory\Database\DatabaseFactory;
 
@@ -9,8 +10,8 @@ class DocumentFactory extends DatabaseFactory {
 
   protected $_id;
 
-  public function __construct(Connector $connector, $db, $id) {
-    parent::__construct($connector, $db);
+  public function __construct(CoderManager $coder, Connector $connector, $db, $id) {
+    parent::__construct($coder, $connector, $db);
     $this->_id = $id;
   }
 

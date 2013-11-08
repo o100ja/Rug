@@ -2,6 +2,7 @@
 
 namespace Rug\Gateway\Database\Document\Design;
 
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Message\Factory\Database\Document\Design\ViewFactory;
 use Rug\Message\Parser\Database\Document\Design\ViewParser;
@@ -12,11 +13,10 @@ class ViewGateway extends AbstractSectionGateway {
 
   /********************************************************************************************************************/
 
-  public function __construct(Connector $connector, $db, $id, $name) {
-    parent::__construct($connector, $db, $id, $name);
-    $this->_setFactory(new ViewFactory($connector, $db, $id, $name));
-    $this->_setParser(new ViewParser($db, $id, $name));
-
+  public function __construct(CoderManager $coder, Connector $connector, $db, $id, $name) {
+    parent::__construct($coder, $connector, $db, $id, $name);
+    $this->_setFactory(new ViewFactory($coder, $connector, $db, $id, $name));
+    $this->_setParser(new ViewParser($coder, $db, $id, $name));
   }
 
   /********************************************************************************************************************/

@@ -3,15 +3,21 @@
 namespace Rug\Message\Parser\Database\Document;
 
 use Buzz\Message\Response;
+use Rug\Coder\CoderManager;
 use Rug\Exception\RugException;
 use Rug\Message\Parser\Database\AbstractDatabaseParser;
 
 class AbstractDocumentParser extends AbstractDatabaseParser {
 
+  /********************************************************************************************************************/
+
+  /**
+   * @var string
+   */
   private $_id;
 
-  public function __construct($db, $id) {
-    parent::__construct($db);
+  public function __construct(CoderManager $coder, $db, $id) {
+    parent::__construct($coder, $db);
     $this->_id = $id;
   }
 
@@ -26,7 +32,7 @@ class AbstractDocumentParser extends AbstractDatabaseParser {
 
   public function rev(Response $response) {
     if ($response->isSuccessful()) {
-      return $this->_decode($response->getHeader('Etag'));
+      return $this->decode($response->getHeader('Etag'));
     }
     throw new RugException('not_found', 'The specified document or revision cannot be found or has been deleted');
   }

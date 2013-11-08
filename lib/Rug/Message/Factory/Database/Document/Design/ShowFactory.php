@@ -2,12 +2,13 @@
 
 namespace Rug\Message\Factory\Database\Document\Design;
 
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 
 class ShowFactory extends AbstractSectionFactory {
 
-  public function __construct(Connector $connector, $db, $id, $name) {
-    parent::__construct($connector, $db, $id, $name, '_show');
+  public function __construct(CoderManager $coder, Connector $connector, $db, $id, $name) {
+    parent::__construct($coder, $connector, $db, $id, $name, '_show');
   }
 
 }

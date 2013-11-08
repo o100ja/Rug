@@ -5,6 +5,7 @@ namespace Rug;
 //define('RUG_MIN', null);
 
 use Buzz\Client\ClientInterface;
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Gateway\ConfigGateway;
 use Rug\Gateway\Database\DatabaseGateway;
@@ -13,6 +14,21 @@ use Rug\Gateway\Database\Document\DocumentGateway;
 use Rug\Gateway\ServerGateway;
 
 class Rug {
+
+  /********************************************************************************************************************/
+
+  /**
+   * @var Connector
+   *
+   */
+  private $_connector;
+
+  /**
+   * @var CoderManager
+   */
+  private $_coder;
+
+  /********************************************************************************************************************/
 
   /**
    * @var ServerGateway
@@ -23,9 +39,12 @@ class Rug {
    */
   private $_config;
 
+  /********************************************************************************************************************/
+
   public function __construct(array $options = array(), ClientInterface $client = null) {
     $this->_connector = new Connector($options, $client);
-    $this->_server    = new ServerGateway($this->_connector, isset($options['name']) ? $options['name'] : null);
+    $this->_coder     = new CoderManager();
+    $this->_server    = new ServerGateway($this->_coder, $this->_connector, isset($options['name']) ? $options['name'] : null);
   }
 
   /********************************************************************************************************************/
@@ -35,7 +54,7 @@ class Rug {
    */
   public function config() {
     if (empty($this->_config)) {
-      $this->_config = new ConfigGateway($this->_connector);
+      $this->_config = new ConfigGateway($this->_coder, $this->_connector);
     }
     return $this->_config;
   }

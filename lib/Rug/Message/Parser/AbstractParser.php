@@ -3,27 +3,39 @@
 namespace Rug\Message\Parser;
 
 use Buzz\Message\Response;
+use Rug\Coder\CoderManager;
 use Rug\Exception\RugException;
-use Rug\Gateway\AbstractGateway;
 
 abstract class AbstractParser {
 
-  const MIME_JSON = AbstractGateway::MIME_JSON;
+  /**
+   * @var CoderManager
+   */
+  protected $_coder;
 
-  public function handle(Response $response, $method, $mime = null) {
-    if (method_exists($this, $method)) {
-      return $this->$method($response, $mime);
+  /********************************************************************************************************************/
+
+  public function __construct(CoderManager $coder) {
+    $this->_coder = $coder;
+  }
+
+  /********************************************************************************************************************/
+
+  public function handle(Response $response, $method = null, $mime = null) {
+    if (empty($method) || !method_exists($this, $method)) {
+      return $this->_parse($response, $mime);
     }
-    return $this->_parse($response, $mime);
+    return $this->$method($response, $mime);
   }
 
-  protected function _decode($content, $mime = AbstractGateway::MIME_JSON) {
-    // TODO: create a decoder wrapper
-    return json_decode($content);
+  public function decode($data, $mime = CoderManager::MIME_JSON) {
+    return $this->_coder->get($mime)->decode($data);
   }
+
+  /********************************************************************************************************************/
 
   public function _parse(Response $response, $mime = null) {
-    $data = $this->_decode($response->getContent(), $mime);
+    $data = $this->decode($response->getContent(), $mime);
     if (isset($data->error)) {
       throw new RugException($data->error, $data->reason);
     }

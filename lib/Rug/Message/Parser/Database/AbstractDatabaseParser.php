@@ -2,13 +2,17 @@
 
 namespace Rug\Message\Parser\Database;
 
+use Rug\Coder\CoderManager;
 use Rug\Message\Parser\AbstractParser;
 
 abstract class AbstractDatabaseParser extends AbstractParser {
 
+  /********************************************************************************************************************/
+
   private $_db;
 
-  public function __construct($db) {
+  public function __construct(CoderManager $coder, $db) {
+    parent::__construct($coder);
     $this->_db = $db;
   }
 
@@ -19,5 +23,6 @@ abstract class AbstractDatabaseParser extends AbstractParser {
     return $this->_db;
   }
 
+  /********************************************************************************************************************/
 
 }

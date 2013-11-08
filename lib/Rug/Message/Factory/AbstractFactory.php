@@ -6,6 +6,7 @@ use Buzz\Message\Factory\Factory;
 use Buzz\Message\Factory\FactoryInterface;
 use Buzz\Message\RequestInterface;
 use Buzz\Util\Url;
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Message\RugRequest;
 use Rug\Message\RugResponse;
@@ -20,36 +21,29 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
 
   protected $_userAgent = 'Rug/0.1';
 
-  /********************************************************************************************************************/
-
-  private $_fInfo;
-
   /**
-   * @param \SplFileInfo $file
-   * @return string
+   * @var CoderManager
    */
-  protected function _mime(\SplFileInfo $file) {
-    if (empty($this->_fInfo)) {
-      $this->_fInfo = new \finfo(FILEINFO_MIME_TYPE);
-    }
-    return $this->_fInfo->file($file->getRealPath());
-  }
-
-  public function encode($data) {
-    return json_encode($data);
-  }
+  protected $_coder;
 
   /********************************************************************************************************************/
 
-  public function __construct(Connector $connector) {
-    $this->_host = $connector->getHost();
-    $this->_port = $connector->getPort();
-    $this->_path = $connector->getPath();
-    $this->_ssl  = $connector->isSSL();
+  public function __construct(CoderManager $coder, Connector $connector) {
+    $this->_host  = $connector->getHost();
+    $this->_port  = $connector->getPort();
+    $this->_path  = $connector->getPath();
+    $this->_ssl   = $connector->isSSL();
+    $this->_coder = $coder;
   }
+
+  /********************************************************************************************************************/
 
   public function isSSL() {
     return $this->_ssl;
+  }
+
+  public function encode($data, $mime = CoderManager::MIME_JSON) {
+    return $this->_coder->get($mime)->encode($data);
   }
 
   /********************************************************************************************************************/
@@ -79,6 +73,8 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
     return $this;
   }
 
+  /********************************************************************************************************************/
+
   abstract public function path($path = '');
 
   private function _root($path = '') {
@@ -101,6 +97,8 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
     return $this->_url($this->_root($this->path($path)), $parameters);
   }
 
+  /********************************************************************************************************************/
+
   public function createCDBRequest(
     $method, $path = '', array $params = array(), $content = null, $headers = array(),
     $mime = 'application/json', array &$options = array()
@@ -116,7 +114,7 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
       $options[CURLOPT_INFILE]     = fopen($content->getRealPath(), 'r');
       $options[CURLOPT_INFILESIZE] = $content->getSize();
       if (empty($mime)) {
-        $mime = $this->_mime($content);
+        $mime = $this->_coder->mime($content);
       }
     } else {
       $this->applyContent($request, $content);
@@ -132,5 +130,7 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
   public function createCDBResponse($parser = null) {
     return new RugResponse($parser);
   }
+
+  /********************************************************************************************************************/
 
 }

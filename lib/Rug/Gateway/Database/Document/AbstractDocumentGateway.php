@@ -2,6 +2,7 @@
 
 namespace Rug\Gateway\Database\Document;
 
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Exception\RugException;
 use Rug\Gateway\Database\AbstractDatabaseGateway;
@@ -13,13 +14,8 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
    */
   private $_id;
 
-  /**
-   * @param Connector $connector
-   * @param string $db
-   * @param string $id
-   */
-  public function __construct(Connector $connector, $db, $id) {
-    parent::__construct($connector, $db);
+  public function __construct(CoderManager $coder, Connector $connector, $db, $id) {
+    parent::__construct($coder, $connector, $db);
     $this->_id = $id;
   }
 
@@ -32,10 +28,16 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
 
   /********************************************************************************************************************/
 
+  /**
+   * @return string
+   */
   public function rev() {
     return $this->_call(__FUNCTION__, self::METHOD_HEAD);
   }
 
+  /**
+   * @return array
+   */
   public function revs() {
     return $this->_call(__FUNCTION__, self::METHOD_GET, '', array(
       'revs' => 'true',
@@ -44,6 +46,12 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
 
   /********************************************************************************************************************/
 
+  /**
+   * @param null|string $rev
+   * @param bool $conflicts
+   * @param bool $info
+   * @return mixed
+   */
   public function data($rev = null, $conflicts = false, $info = false) {
     $parameters = array();
     if (!empty($rev)) {
@@ -58,6 +66,10 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
     return $this->_call(__FUNCTION__, self::METHOD_GET, $parameters);
   }
 
+  /**
+   * @param null $rev
+   * @return mixed
+   */
   public function kill($rev = null) {
     if (empty($rev)) {
       $rev = $this->rev();
@@ -67,6 +79,12 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
     ));
   }
 
+  /**
+   * @param string $dstID
+   * @param null $srcRev
+   * @param null $dstRev
+   * @return mixed
+   */
   public function copy($dstID, $srcRev = null, $dstRev = null) {
     $parameters = empty($srcRev) ? array() : array(
       'rev' => $this->_validator()->rev($srcRev)
@@ -82,6 +100,12 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
 
   /********************************************************************************************************************/
 
+  /**
+   * @param string $name
+   * @param null $path
+   * @return \SplFileInfo
+   * @throws \Rug\Exception\RugException
+   */
   public function attachmentFile($name, $path = null) {
     if (empty($path)) {
       $path = tempnam(sys_get_temp_dir(), 'rug_' . $name . '_');
@@ -89,7 +113,6 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
     if (!is_writable($path)) {
       throw new RugException("The specified attachment download location is invalid");
     }
-
     try {
       if (!copy($this->attachmentLink($name), $path)) {
         throw new \Exception("Failed to download the attachment: $name");
@@ -100,11 +123,23 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
     return new \SplFileInfo($path);
   }
 
+  /**
+   * @param string $name
+   * @param bool $absolute
+   * @return string
+   */
   public function attachmentLink($name, $absolute = true) {
     $url = $this->_factory()->createURL($this->_validator()->name($name));
     return $url->format($absolute ? 'HR' : 'R');
   }
 
+  /**
+   * @param string $name
+   * @param \SplFileInfo $file
+   * @param null|string $rev
+   * @param null|string $mime
+   * @return mixed
+   */
   public function attach($name, \SplFileInfo $file, $rev = null, $mime = null) {
     if (empty($rev)) {
       $rev = $this->rev();
@@ -114,6 +149,11 @@ abstract class AbstractDocumentGateway extends AbstractDatabaseGateway {
     ), $file, array(), $mime);
   }
 
+  /**
+   * @param string $name
+   * @param null|string $rev
+   * @return mixed
+   */
   public function detach($name, $rev = null) {
     if (empty($rev)) {
       $rev = $this->rev();

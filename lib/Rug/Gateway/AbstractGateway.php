@@ -2,6 +2,7 @@
 namespace Rug\Gateway;
 
 use Buzz\Message\Response;
+use Rug\Coder\CoderManager;
 use Rug\Connector\Connector;
 use Rug\Message\Factory\AbstractFactory;
 use Rug\Message\Parser\AbstractParser;
@@ -20,9 +21,20 @@ abstract class AbstractGateway {
 
   /********************************************************************************************************************/
 
-  const MIME_JSON = 'application/json';
+  /**
+   * @var CoderManager
+   */
+  private $_coder;
 
-  /********************************************************************************************************************/
+  /**
+   * @var Connector
+   */
+  private $_connector;
+
+  /**
+   * @var RugValidator
+   */
+  private $_validator;
 
   /**
    * @var AbstractParser
@@ -34,17 +46,15 @@ abstract class AbstractGateway {
    */
   private $_factory;
 
-  /**
-   * @var RugValidator
-   */
-  private $_validator;
-
   /********************************************************************************************************************/
 
-  public function __construct(Connector $connector) {
+  public function __construct(CoderManager $coder, Connector $connector) {
+    $this->_coder     = $coder;
     $this->_connector = $connector;
     $this->_validator = new RugValidator();
   }
+
+  /********************************************************************************************************************/
 
   /**
    * @param AbstractFactory $factory
@@ -76,6 +86,27 @@ abstract class AbstractGateway {
   /********************************************************************************************************************/
 
   /**
+   * @return CoderManager
+   */
+  protected function _coder() {
+    return $this->_coder;
+  }
+
+  /**
+   * @return Connector
+   */
+  protected function _connector() {
+    return $this->_connector;
+  }
+
+  /**
+   * @return RugValidator
+   */
+  protected function _validator() {
+    return $this->_validator;
+  }
+
+  /**
    * @return AbstractFactory
    */
   protected function _factory() {
@@ -89,20 +120,24 @@ abstract class AbstractGateway {
     return $this->_parser;
   }
 
-  /**
-   * @return RugValidator
-   */
-  protected function _validator() {
-    return $this->_validator;
-  }
-
   /********************************************************************************************************************/
 
-  protected function _encode($data) {
-    return $this->_factory()->encode($data);
+  /**
+   * @param mixed $data
+   * @param string $mime
+   * @return mixed
+   */
+  protected function _encode($data, $mime = CoderManager::MIME_JSON) {
+    return $this->_coder()->get($mime)->encode($data);
   }
 
-  protected function _parse(Response $response, $handler, $mime = self::MIME_JSON) {
+  /**
+   * @param Response $response
+   * @param string $handler
+   * @param string $mime
+   * @return mixed
+   */
+  protected function _parse(Response $response, $handler, $mime = CoderManager::MIME_JSON) {
     return $this->_parser()->handle($response, $handler, $mime);
   }
 
@@ -118,15 +153,25 @@ abstract class AbstractGateway {
    */
   protected function _call($handler = '',
                            $method = self::METHOD_GET, $path = '', array $params = array(),
-                           $content = null, $headers = array(), $mime = self::MIME_JSON
+                           $content = null, $headers = array(), $mime = CoderManager::MIME_JSON
   ) {
     $response = $this->_send($method, $path, $params, $content, $headers, $mime, $handler);
     return $this->_parse($response, $handler, $mime);
   }
 
+  /**
+   * @param string $method
+   * @param string $path
+   * @param array $params
+   * @param null|mixed $content
+   * @param array $headers
+   * @param string $mime
+   * @param null|string $parser
+   * @return Response
+   */
   protected function _send(
     $method, $path = '', array $params = array(), $content = null, $headers = array(),
-    $mime = self::MIME_JSON,
+    $mime = CoderManager::MIME_JSON,
     $parser = null
   ) {
     $options  = array();
@@ -138,6 +183,8 @@ abstract class AbstractGateway {
     );
     return $this->_connector->send($request, $response, $options);
   }
+
+  /********************************************************************************************************************/
 
 }
  
