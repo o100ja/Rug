@@ -110,8 +110,10 @@ abstract class AbstractFactory extends Factory implements FactoryInterface {
     $location = $this->createURL($path, $params);
 
     if ($content instanceof \SplFileInfo) {
+      $path                    = $content->getRealPath();
+      clearstatcache(true, $path);
       $options[CURLOPT_PUT]        = true;
-      $options[CURLOPT_INFILE]     = fopen($content->getRealPath(), 'r');
+      $options[CURLOPT_INFILE] = fopen($path, 'r');
       $options[CURLOPT_INFILESIZE] = $content->getSize();
       if (empty($mime)) {
         $mime = $this->_coder->mime($content);
