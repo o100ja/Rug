@@ -34,10 +34,16 @@ abstract class AbstractParser {
 
   /********************************************************************************************************************/
 
+  protected function _error($data) {
+    return $data->reason;
+  }
+
+  /********************************************************************************************************************/
+
   public function _parse(Response $response, $mime = null) {
     $data = $this->decode($response->getContent(), $mime);
     if (isset($data->error)) {
-      throw new RugException($data->error, $data->reason);
+      throw new RugException($data->error, $this->_error($data));
     }
     return $data;
   }

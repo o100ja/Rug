@@ -24,5 +24,12 @@ class AbstractSectionParser extends AbstractDocumentParser {
     return $this->_name;
   }
 
+  /********************************************************************************************************************/
+
+  protected function _error($data) {
+    return sprintf("%s/%s", parent::_error($data), $this->_name);
+  }
+
+
 }
 

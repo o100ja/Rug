@@ -30,6 +30,12 @@ class AbstractDocumentParser extends AbstractDatabaseParser {
 
   /********************************************************************************************************************/
 
+  protected function _error($data) {
+    return sprintf("%s/%s", parent::_error($data), $this->_id);
+  }
+
+  /********************************************************************************************************************/
+
   public function rev(Response $response) {
     if ($response->isSuccessful()) {
       return $this->decode($response->getHeader('Etag'));

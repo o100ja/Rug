@@ -25,4 +25,8 @@ abstract class AbstractDatabaseParser extends AbstractParser {
 
   /********************************************************************************************************************/
 
+  protected function _error($data) {
+    return sprintf("%s @ %s", parent::_error($data), $this->_db);
+  }
+
 }
