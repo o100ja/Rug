@@ -33,6 +33,11 @@ class Connector {
    */
   private $_cookies;
 
+  /**
+   * @var object
+   */
+  private $_auth;
+
   /********************************************************************************************************************/
 
   /**
@@ -49,7 +54,10 @@ class Connector {
       'proxy'   => false,
       'timeout' => 5,
 
-      'db'      => null,
+      'name' => null,
+
+      'user' => null,
+      'pass' => null,
     ), $options);
 
     $this->_cookies = new CookieJar();
@@ -66,6 +74,13 @@ class Connector {
     }
     if ($this->hasProxy()) {
       $this->_client->setProxy($this->getProxy());
+    }
+
+    if ($this->hasAuth()) {
+      $this->_auth = (object)array(
+        'user' => $this->_options->user,
+        'pass' => $this->_options->pass,
+      );
     }
   }
 
@@ -120,15 +135,40 @@ class Connector {
     return !empty($this->_options->proxy);
   }
 
-  /********************************************************************************************************************/
+  /**
+   * @return bool
+   */
+  public function hasAuth() {
+    return !empty($this->_options->user);
+  }
+
+  /**
+   * @return object
+   */
+  public function getAuth() {
+    return $this->_auth;
+  }
 
   /**
    * @param Request $request
+   */
+  public function setupAuth(Request $request) {
+    if ($auth = $this->getAuth()) {
+      $request->addHeader('Authorization: Basic ' . base64_encode($auth->user . ':' . $auth->pass));
+    }
+  }
+
+  /********************************************************************************************************************/
+
+  /**
+   * @param Request  $request
    * @param Response $response
-   * @param array $options
-   * @return Response
+   * @param array    $options
+   *
+*@return Response
    */
   public function send(Request $request, Response $response, array $options = array()) {
+    $this->setupAuth($request);
     $this->_client->send($request, $response, $options);
     return $response;
   }
