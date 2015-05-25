@@ -160,4 +160,15 @@ class ViewGateway extends AbstractSectionGateway {
     return $this->_get($parameters, $reduce, $group, $level, $skip, $limit, $includeDocs, $stale);
   }
 
+  public function herd(array $keys = null,
+    $reduce = true, $group = false, $level = 0,
+    $skip = 0, $limit = 0,
+    $includeDocs = false, $stale = false
+  ) {
+    $parameters = array(
+      'keys' => $keys,
+    );
+    return $this->_get($parameters, $reduce, $group, $level, $skip, $limit, $includeDocs, $stale);
+  }
+
 }
